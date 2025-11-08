@@ -1,0 +1,193 @@
+{% extends 'users/home.html' %}
+{% block title %}
+<title>User Login - iFARM</title>
+{% endblock %}
+
+{% block style %}
+<style>
+:root {
+    --primary: #2e7d32;      /* Earthy Green */
+    --secondary: #8bc34a;    /* Leaf Green */
+    --accent: #ffb300;       /* Harvest Yellow */
+    --light: #f9fbe7;        /* Soft Farm Background */
+    --dark: #1b5e20;         /* Deep Organic Green */
+    --success: #4caf50;
+    --warning: #fdd835;
+}
+
+/* General Page Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-image: url("https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=800");
+    background-color: var(--light);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #2e2e2e;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: white;
+    border-bottom: 2px solid rgba(46, 125, 50, 0.1);
+}
+
+.navbar-brand {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+    color: var(--dark);
+}
+
+.nav-link {
+    color: #2e2e2e !important;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary) !important;
+    background-color: rgba(139, 195, 74, 0.1);
+    border-radius: 6px;
+}
+
+/* Login Container */
+.login-container {
+    max-width: 420px;
+    margin: 90px auto;
+    padding: 35px;
+    background-color: rgba(200, 200, 200, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+}
+
+.login-container h2 {
+    margin-bottom: 25px;
+    text-align: center;
+    color: var(--dark);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary {
+    width: 100%;
+    background-color: var(--primary);
+    border-color: var(--primary);
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+/* Footer */
+footer {
+    background: var(--dark);
+    color: #f1f8e9;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer a {
+    color: #c5e1a5;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--accent);
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin: 60px 15px;
+        padding: 25px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="my-5">
+    {% set messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show mx-5" role="alert">
+              {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+</div>
+
+<div class="login-container">
+    <h2>Welcome Back to <span style="color: var(--primary)">iFARM</span></h2>
+
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('login') }}" novalidate>
+        {{form.csrf_token}}
+
+        <div class="form-group form-floating">
+            {{form.username(class_='form-control', placeholder='Username / Email / Phone')}}
+            {{form.username.label}}
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <span class="error-message">{{error}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-group form-floating">
+            {{form.password(class_='form-control', placeholder='Password')}}
+            {{form.password.label}}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                    <span class="error-message">{{error}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{form.submit(class_='btn btn-primary')}}
+        </div>
+
+        <div class="text-center mt-3">
+            <small>Don’t have an account? 
+                <a href="{{ url_for('signup') }}" class="text-success fw-bold">Sign up</a>
+            </small>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    <title>iFARM - All parties meet here.</title>
+    {% endblock %}
+    <link rel="icon" type="image/svg" href="{{ url_for('static', filename='images/ifarm.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+</head>
+
+{% block style %}
+
+<style>
+    /* ----------------------------
+   iFARM AGRO THEME - CLEAN GREEN UI
+   ---------------------------- */
+
+:root {
+    --primary: #2e7d32;      /* Earthy Green */
+    --secondary: #8bc34a;    /* Leaf Green */
+    --accent: #ffb300;       /* Harvest Yellow */
+    --light: #f9fbe7;        /* Soft Farm Background */
+    --dark: #1b5e20;         /* Deep Organic Green */
+    --success: #4caf50;
+    --warning: #fdd835;
+}
+
+/* Body & Typography */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #2e2e2e;
+    background-color: var(--light);
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: white;
+    border-bottom: 2px solid rgba(46, 125, 50, 0.1);
+}
+
+.navbar-brand {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+    color: var(--dark);
+}
+
+.nav-link {
+    color: #2e2e2e !important;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary) !important;
+    background-color: rgba(139, 195, 74, 0.1);
+    border-radius: 6px;
+}
+
+/* Buttons */
+.btn-outline-success {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(34, 94, 20, 0.5), rgba(27, 94, 32, 0.4)), 
+                url('/static/images/hero.jpg'),
+                no-repeat center center;
+    background-size: cover;
+    color: #fff;
+    padding: 140px 0;
+    text-align: center;
+    border-radius: 0;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    animation: floatUp 1s ease-in-out;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #f1f8e9;
+    margin-bottom: 20px;
+    animation: floatUp 1.3s ease-in-out;
+}
+
+.hero a.btn {
+    animation: floatUp 1.6s ease-in-out;
+}
+
+/* Hero Animation */
+@keyframes floatUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Features Section */
+.features {
+    background-color: #fff;
+}
+
+.features i {
+    color: var(--primary);
+    background: rgba(46, 125, 50, 0.1);
+    border-radius: 50%;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.features .col-md-4:hover i {
+    background: var(--primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.features h3 {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.features p {
+    color: #4f4f4f;
+}
+
+/* Section Titles */
+.section-title {
+    position: relative;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    margin: 12px auto;
+    border-radius: 2px;
+}
+
+/* Cards (Products, Items, etc.) */
+.card {
+    border: 1px solid rgba(76, 175, 80, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(76, 175, 80, 0.15);
+}
+
+.card-body i {
+    color: var(--primary);
+}
+
+/* Footer */
+footer {
+    background: var(--dark);
+    color: #f1f8e9;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer a {
+    color: #c5e1a5;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--accent);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero {
+        padding: 100px 20px;
+    }
+    .hero h1 {
+        font-size: 2rem;
+    }
+}
+
+</style>
+{% endblock %}
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('home') }}">
+                    <div class="logo">
+                        <img    src="{{url_for('static', filename='images/ifarm.svg')}}"
+                                alt="iFARM Logo" 
+                                height="50">
+                    </div>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact Us</a>
+                        </li>
+                        {% if not session.get('isonline') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('signup')}}">SignUp</a>
+                        </li>
+                        {% endif %}
+                        {% if session.get('isonline') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('mycart')}}">Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('history')}}">History</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}
+    <div class="container">
+        <div class="my-4">
+            {% set messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} 
+                                alert-dismissible fade show" role="alert">
+                            {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+        
+    <div class="container-fluid px-0">
+        <section class="hero text-center">
+            <div class="banner">
+                <h1 class="display-4 animate__animated animate__fadeInDown">iFARM</h1>
+                <p class="lead animate__animated animate__fadeInUp mb-4">Your trusted partner for all farm produce</p>
+                <a href="/get-started" class="btn btn-primary btn-lg animate__animated animate__fadeInUp">Explore Our Stores</a>
+            </div>
+        </section>
+    </div>
+
+    <div class="container">
+        <section class="features py-5 bg-light">
+            
+            <div class="row">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <i class="fas fa-seedling fa-2x text-success mb-3"></i>
+                    <h3>Fresh & Organic Produce</h3>
+                    <p>We connect you directly with trusted farmers to ensure you get farm-fresh, chemical-free produce delivered straight to your doorstep.</p>
+                </div>
+
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <i class="fas fa-tractor fa-2x text-success mb-3"></i>
+                    <h3>Empowering Farmers</h3>
+                    <p>Our platform gives local farmers digital access to wider markets, fair pricing, and tools to grow their agribusiness sustainably.</p>
+                </div>
+
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-shield-alt fa-2x text-success mb-3"></i>
+                    <h3>Quality & Trust</h3>
+                    <p>Every product on iFARM meets high quality standards — verified, traceable, and guaranteed fresh for every customer.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="products py-5">
+            <div class="row mb-5">
+                <section class="products py-5 bg-light">
+                    <div class="row mb-5">
+                        <div class="col text-center">
+                            <h2 class="section-title text-success fw-bold">WHAT WE HAVE IN STORE</h2>
+                            <p class="text-muted">Explore fresh produce straight from the farm — healthy, organic, and sustainably grown.</p>
+                        </div>
+                    </div>
+
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-carrot fa-3x text-success mb-3"></i>
+                                <h4 class="fw-semibold">Fresh Vegetables</h4>
+                                <p class="text-muted">Crisp, hand-picked veggies from local farms — full of flavor and nutrients.</p>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-apple-alt fa-3x text-success mb-3"></i>
+                                <h4 class="fw-semibold">Fruits & Harvest</h4>
+                                <p class="text-muted">Sweet and juicy seasonal fruits — naturally grown and freshly harvested.</p>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-seedling fa-3x text-success mb-3"></i>
+                                <h4 class="fw-semibold">Grains & Seeds</h4>
+                                <p class="text-muted">Premium grains and organic seeds cultivated for quality and sustainability.</p>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <div class="row">
+                {% for p in products %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div id="carousel-{{p.prod_id}}" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for image in p.images %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <img src="/static/products/{{image.filename}}" class="d-block w-100 card-img-top" alt="{{p.prod_name}}" style="height: 220px; object-fit: cover;">
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{p.prod_id}}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{p.prod_id}}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        
+                        <div class="card-body">
+                            <h3 class="card-title">{{p.prod_name}}</h3>
+                            <p class="card-text"><strong>Category:</strong> {{p.category}}</p>
+                            <p class="card-text"><strong>Price:</strong> N{{p.amount}}</p>
+                            <p class="card-text"><strong>Status:</strong> <span class="badge bg-{% if p.status == 'Available' %}success{% else %}warning{% endif %}">{{p.status}}</span></p>
+                            <p class="card-text"><strong>Stock:</strong> {{p.quantity}} remaining</p>
+
+                            {% if session.get('isonline') %}
+                            <a href="{{url_for('cart_add',id=p.prod_id)}}"
+                                class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-cart-plus me-2"></i>Add To Cart
+                            </a>
+                            {% else %}
+                            <button type="button" 
+                                    class="btn btn-primary disabled-like w-100" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#loginModal">
+                                <i class="fas fa-lock me-2"></i>Login To Add To Cart
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+    {% endblock %}
+
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 iFARM. All rights reserved.</p>
+            <div class="mt-3">
+                <a href="#" class="text-light mx-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-lock fa-3x text-primary mb-3"></i>
+                    <p>You must be logged in to add items to your cart.</p>
+                    <a class="btn btn-primary mt-2" href="{{url_for('login')}}">Login Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block scripts %}
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous">
+    </script>
+    
+    <script>
+        $(document).ready(() => {
+            $('#cart').on('click', function (e) {
+                if ($(this).is(':disabled')) {
+                    e.preventDefault();
+                    let loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                    loginModal.show();
+                }
+            });
+            
+            // Enable product carousel controls
+            $('.carousel').carousel({
+                interval: 3000
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

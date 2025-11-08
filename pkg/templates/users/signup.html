@@ -1,0 +1,246 @@
+{% extends 'users/home.html' %}
+{% block title %}
+<title>User Sign Up - iFARM</title>
+{% endblock %}
+
+{% block style %}
+<style>
+:root {
+    --primary: #2e7d32;      /* Earthy Green */
+    --secondary: #8bc34a;    /* Leaf Green */
+    --accent: #ffb300;       /* Harvest Yellow */
+    --light: #f9fbe7;        /* Soft Farm Background */
+    --dark: #1b5e20;         /* Deep Organic Green */
+    --success: #4caf50;
+    --warning: #fdd835;
+}
+
+/* ========================================== */
+/* Global */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #2e2e2e;
+    background: linear-gradient(rgba(46, 125, 50, 0.2), rgba(27, 94, 32, 0.3)),
+                url("https://images.pexels.com/photos/7782941/pexels-photo-7782941.jpeg?auto=compress&cs=tinysrgb&w=1600");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================== */
+/* Navbar */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 2px solid rgba(46, 125, 50, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+    color: var(--dark);
+}
+
+.nav-link {
+    color: #2e2e2e !important;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary) !important;
+    background-color: rgba(139, 195, 74, 0.1);
+    border-radius: 6px;
+}
+
+/* ========================================== */
+/* Signup Box */
+.signup-container {
+    max-width: 420px;
+    margin: 80px auto;
+    padding: 35px 30px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(139, 195, 74, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in;
+}
+
+.signup-container h2 {
+    margin-bottom: 25px;
+    text-align: center;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.form-floating label {
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.form-control {
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(46, 125, 50, 0.2);
+}
+
+.form-control:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(139, 195, 74, 0.4);
+}
+
+/* ========================================== */
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    background-color: var(--primary);
+    border: none;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary);
+    transform: scale(1.03);
+}
+
+.btn-success {
+    background-color: var(--accent);
+    color: #1b1b1b;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: var(--secondary);
+    color: #fff;
+}
+
+/* ========================================== */
+/* Footer */
+footer {
+    background: var(--dark);
+    color: #f1f8e9;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer a {
+    color: #c5e1a5;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--accent);
+}
+
+/* ========================================== */
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================== */
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .signup-container {
+        margin: 50px 20px;
+        padding: 25px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <h2>Create Your iFARM Account</h2>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('signup') }}" novalidate>
+        {{ form.csrf_token }}
+
+        <div class="form-floating">
+            {{ form.fname(class_='form-control', id='fname', placeholder='First Name') }}
+            <label for="fname">First Name</label>
+            {% for error in form.fname.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.lname(class_='form-control', id='lname', placeholder='Last Name') }}
+            <label for="lname">Last Name</label>
+            {% for error in form.lname.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.username(class_='form-control', id='username', placeholder='Username') }}
+            <label for="username">Username</label>
+            {% for error in form.username.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.email(class_='form-control', id='email', placeholder='Email Address') }}
+            <label for="email">Email</label>
+            {% for error in form.email.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.phone(class_='form-control', id='phone', placeholder='Phone Number') }}
+            <label for="phone">Phone Number</label>
+            {% for error in form.phone.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.password(class_='form-control', id='password', placeholder='Password') }}
+            <label for="password">Password</label>
+            {% for error in form.password.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.cpassword(class_='form-control', id='cpassword', placeholder='Confirm Password') }}
+            <label for="cpassword">Confirm Password</label>
+            {% for error in form.cpassword.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group mt-3">
+            {{ form.submit(class_='btn btn-primary py-2') }}
+        </div>
+
+        <div class="text-center mt-3">
+            <small>Already have an account?
+                <a class="btn btn-sm btn-success" href="{{ url_for('login') }}">Login</a>
+            </small>
+        </div>
+    </form>
+</div>
+{% endblock %}
