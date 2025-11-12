@@ -1,2 +1,14 @@
-.env
-__pycache__
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.env/
+
+# Alembic cache
+migrations/__pycache__/
+
+# IDE settings
+.vscode/
+.idea/
