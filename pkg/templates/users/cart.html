@@ -1,0 +1,81 @@
+{% extends 'users/home.html' %}
+
+{% block title %}
+<title>User Cart - Hand of God</title>
+{% endblock %}
+
+
+{% block style %}
+<style>
+   input, td, th {
+        text-align: center !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="my-5">
+    {% set messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} 
+                    alert-dismissible fade show mx-5" role="alert">
+              {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+  
+    {% endif %}
+  </div>
+  <form action="{{url_for('checkout')}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    
+    <table class="table table-dark">
+        {% if items %}
+
+        <thead>
+            <tr>
+                <th>S/N</th><th>Product Name</th><th>Price</th><th>Quantity</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for item in items %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{item.cart.prod_name}}</td>
+                
+                <!-- store IDs as arrays -->
+                <input type="hidden" name="cart_id[]" value="{{item.cart_id}}">
+                <input type="hidden" name="prod_id[]" value="{{item.cart.prod_id}}">
+                
+                <td style="width: 15%;">
+                    <input class="form-control" type="number" name="price[]" value="{{item.cart.amount}}" readonly>
+                </td>
+                <td style="width: 15%;">
+                    <input class="form-control" type="number" name="quantity[]" value="{{item.cart_qty or 1}}">
+                </td>
+                <td>
+                    <a class="btn btn-danger btn-sm" href="{{url_for('remove_item',id=item.cart_id)}}">Remove item</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style='text-align: center;'>
+        <button class="btn btn-outline-dark form-control" type="submit">Proceed To Checkout</button>
+    </div>
+    {% else %}
+    <div style="text-align: center;
+                background-color: yellow;
+                height: 400px;
+                display: grid;
+                align-items: center;
+                padding: 100px;">
+        <h3 >Your Cart Is Empty.</h3>
+        <p>Proceed to <a class="text-decoration-none text-light badge text-bg-success" href="{{url_for('home')}}">Home</a> To add products to your cart </p>
+    </div>
+    {% endif %}
+</form>
+
+{% endblock %}

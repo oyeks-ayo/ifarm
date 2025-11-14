@@ -1,0 +1,115 @@
+{% extends 'users/home.html' %}
+{% block title %}
+<title>Admin Sign Up - Hand of God</title>
+{% endblock %}
+
+{% block style %}
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: url('/static/images/house.jpg') no-repeat center center;
+        background-color: #dbebfa;
+        color: #333;
+    }
+    .signup-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 30px;
+        background-color:rgba(220, 218, 215, 0.853);
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .signup-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .form-control {
+        margin-bottom: 15px;
+    }
+    .btn-primary {
+        width: 100%;
+    }
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <h2>Admin Sign Up</h2>
+    <div class="my-5">
+        {% set messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} 
+                        alert-dismissible fade show mx-5" role="alert">
+                  {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+      
+        {% endif %}
+    </div>
+    <form method="POST" action="{{ url_for('admin_signup') }}" novalidate>
+        {{form.csrf_token}}
+        <div class="form-group">
+            {{form.username.label}}
+            {{form.username(class_='form-control', id= 'username', placeholder = 'Username')}}
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <span class="error-message">{{error}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{form.email.label}}
+            {{form.email(class_='form-control', placeholder='Email')}}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span class="error-message">{{error}}</span>
+                    {% endfor %}
+                {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{form.phone.label}}
+            {{form.phone(class_='form-control', placeholder='Phone')}}
+                {% if form.phone.errors %}
+                    {% for error in form.phone.errors %}
+                        <span class="error-message">{{error}}</span>
+                    {% endfor %}
+                {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{form.password.label}}
+            {{form.password(class_='form-control', placeholder='Password')}}
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <span class="error-message">{{error}}</span>
+                    {% endfor %}
+                {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{form.cpassword.label}}
+            {{form.cpassword(class_='form-control', placeholder='Password')}}
+                {% if form.cpassword.errors %}
+                    {% for error in form.cpassword.errors %}
+                        <span class="error-message">{{error}}</span>
+                    {% endfor %}
+                {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{form.submit(class_='btn btn-primary')}}
+        </div>
+        
+    </form>
+</div>
+{% endblock %}

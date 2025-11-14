@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% block title %}
+  <title>iFARM - Admin</title>
+  {% endblock %}
+  <link rel="icon" type="image/svg" href="{{ url_for('static', filename='images/ifarm.svg') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  {% block style %}
+  <style>
+    :root {
+      --green: #2e7d32;
+      --light-green: #c8e6c9;
+      --harvest-yellow: #fdd835;
+      --cream: #fafafa;
+      --dark: #1b5e20;
+      --muted: #f1f8e9;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--cream);
+      color: #333;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      min-height: 100vh;
+      background-color: var(--green);
+      color: #fff;
+      padding: 2rem 1.2rem;
+      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    .sidebar p {
+      color: #dcedc8;
+      font-size: 0.9rem;
+    }
+
+    .sidebar a.btn {
+      width: 100%;
+      margin: 0.5rem 0;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .sidebar a.btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar-brand {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--green);
+    }
+
+    /* Dashboard Title */
+    .dashboard-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: var(--green);
+    }
+
+    /* Card Style */
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      background-color: white;
+    }
+
+    /* Table */
+    table {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: var(--light-green);
+      color: var(--dark);
+    }
+
+    tbody tr:hover {
+      background-color: var(--muted);
+    }
+
+    /* Flash Messages */
+    .alert {
+      max-width: 600px;
+      margin: 1rem auto;
+      border-radius: 8px;
+    }
+
+        /* Error Messages */
+    .error-message {
+        color: red;
+    }
+
+
+    /* Form */
+    .form {
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control {
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    .btn-success {
+      background-color: var(--green);
+      border-color: var(--green);
+    }
+
+    .btn-success:hover {
+      background-color: var(--dark);
+      border-color: var(--dark);
+    }
+
+    footer {
+      background: var(--dark);
+      color: #f1f8e9;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--harvest-yellow);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        min-height: auto;
+        text-align: center;
+      }
+    }
+  </style>
+  {% endblock %}
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+        <div class="text-center mb-4">
+          <h2><a href="{{url_for('admin_home')}}">Admin</a></h2>
+          <a href="{{url_for('home')}}">
+            <img src="{{ url_for('static', filename='images/ifarm.svg') }}" alt="iFARM Logo" height="50">
+          </a>
+          <p>Hand of God</p>
+        </div>
+        <a class="btn btn-light text-success" href="{{url_for('add_product')}}">➕ Add Products</a>
+        <a class="btn btn-outline-light" href="{{url_for('update_product')}}">✏️ Update Products</a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="dashboard-title">Welcome Back, Admin 🌾</h1>
+          <form action="{{url_for('admin_logout')}}">
+            <input type="hidden" value="{{csrf_token()}}">
+            <button class="btn btn-outline-success">Logout</button>
+          </form>
+        </div>
+
+        {% block content %}
+        <div class="my-3">
+          {% set messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <!-- Product Table -->
+        <form action="{{url_for('delete_product')}}" method="post">
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <div class="card p-3 mb-4">
+            <table class="table table-hover align-middle text-center">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Image</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in products %}
+                <input type="hidden" name='id' value="{{p.prod_id}}">
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{p.prod_name}}</td>
+                  <td>₦{{p.amount}}</td>
+                  <td>{{p.category}}</td>
+                  <td>{{p.quantity}}</td>
+                  <td>
+                    <span class="badge bg-{{ 'success' if p.status == 'Available' else 'secondary' }}">{{ p.status }}</span>
+                  </td>
+                  <td>
+                    {% for img in p.images %}
+                    <img class="img-thumbnail rounded" src="/static/products/{{img.filename}}" alt="{{p.prod_name}}" width="70">
+                    {% endfor %}
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+
+        <!-- Add Product Form -->
+        <div class="form">
+          <h4 class="text-success mb-4">Add New Product</h4>
+          <form action="{{url_for('add_product')}}" method="post" novalidate enctype="multipart/form-data">
+            {{form.csrf_token}}
+
+            <div class="mb-3">
+              {{form.name.label}}
+              {{form.name(class_='form-control', placeholder='Product Name')}}
+              {% for error in form.name.errors %}
+                <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{form.price.label}}
+              {{form.price(class_='form-control', placeholder='Price')}}
+
+              {% for error in form.price.errors %}
+                <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              <label for="category" class="form-label">Category</label>
+              <select name="category" id="category" class="form-control">
+                <option value="">Select Category</option>
+                {% for c in category %}
+                <option value="{{c.cat_name}}">{{c.cat_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              {{form.quantity.label}}
+              {{form.quantity(class_='form-control', placeholder='Quantity')}}
+
+              {% for error in form.quantity.errors %}
+                <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{form.image.label}} <br>
+              {{form.image(multiple=True, accept="image/*")}}
+
+              {% for error in form.image.errors %}
+                <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{form.status.label}} <br>
+              {% for subfield in form.status %}
+                <div class="form-check form-check-inline">
+                  {{ subfield(class="form-check-input") }}
+                  {{ subfield.label(class="form-check-label") }}
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="mt-4">
+              {{form.submit(class_='btn btn-success form-control')}}
+            </div>
+          </form>
+        </div>
+        {% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 iFARM Admin Dashboard | Built with ❤️ by Ayodele</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

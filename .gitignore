@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment / secret files
+*.env
+config/.env
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Pytest
+.pytest_cache/
+
+# Alembic / migrations caches
+migrations/__pycache__/
+migrations/versions/__pycache__/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor temporary files
+*.swp
+*~
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db

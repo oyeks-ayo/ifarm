@@ -64,9 +64,9 @@ class Carts(db.Model):
     cart_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cart_prod_id = db.Column(db.Integer, db.ForeignKey('product.prod_id'))
     cart_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    cart_amt = db.Column(db.Integer)
-    cart_qty = db.Column(db.Integer)
-    cart_payable = db.Column(db.Integer)
+    cart_qty = db.Column(db.Integer, nullable=False, default=0)
+    cart_amt = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
+    cart_payable = db.Column(db.Numeric(10,2), nullable=False, default=0.00)
 
     cart = db.relationship('Users', backref='mycart')
     cart = db.relationship('Product',backref='incart')
@@ -117,12 +117,13 @@ class History(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     prod_id = db.Column(db.Integer,db.ForeignKey('product.prod_id'))
     user_id = db.Column(db.Integer,db.ForeignKey('users.user_id'))
-    price = db.Column(db.Float)
-    quantity = db.Column(db.Integer)
-    amt_payable = db.Column(db.Integer)
-    total = db.Column(db.Float())
+    # FIXED: Use Numeric for money
+    price = db.Column(db.Numeric(10,2), nullable=False, default=0.00)
+    quantity = db.Column(db.Integer, nullable=False, default=0)
+    amt_payable = db.Column(db.Numeric(10,2), nullable=False, default=0.00)
+    total = db.Column(db.Numeric(10,2), nullable=False, default=0.00)
+    
     date = db.Column(db.DateTime, default=datetime.utcnow)
-
     user = db.relationship('Users', backref='history')
     product = db.relationship('Product', backref='hist')
 
