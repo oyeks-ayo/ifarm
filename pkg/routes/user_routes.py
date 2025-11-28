@@ -99,18 +99,27 @@ def login():
 
     return render_template('users/login.html',form=form)
 
+@app.route('/user/logout/')
+def logout():
+    if session['isonline']:
+        session.pop('isonline')
+        flash('You have signed out', 'success')
+    return redirect(url_for('home'))
+
 @app.route('/cart/add/<int:id>/')
 @login_required
 def cart_add(id):
     user_id = session.get('isonline')
 
     try:
-        in_cart = Carts.query.filter_by(cart_prod_id=id).first()
+        # Ensure the product isn't already in this user's cart
+        in_cart = Carts.query.filter_by(cart_prod_id=id, cart_user_id=user_id).first()
 
         if in_cart:
             raise ValueError('Item already in cart!')
         else:
-            cart = Carts(cart_prod_id=id,cart_user_id=user_id)
+            product = Product.query.get(id)
+            cart = Carts(cart_prod_id=id, cart_user_id=user_id, cart_qty=1, cart_amt=product.amount if product else 0)
             db.session.add(cart)
             db.session.commit()
 
@@ -244,7 +253,8 @@ def insert_order():
         db.session.commit()
 
 
-        ref = int(random.random() * 10000000000000)
+        # Use string reference for pay_ref to match the database column type (String)
+        ref = str(int(random.random() * 10000000000000))
 
         pay = Payment(pay_user=user_id, pay_order=order_id, pay_amt=total, pay_ref=ref)
 
@@ -316,10 +326,12 @@ def paystack_update():
             status ='failed'
 
         #the following will be executed regardless if response is TRUE or NOT
-        pay = Payment.query.filter(Payment.pay_ref==ref).first()
+        # Ensure ref is string to match db column type
+        pay = Payment.query.filter(Payment.pay_ref == str(ref)).first()
 
-        pay.pay_auctual=actual
-        pay.pay_status=status
+        # Fix typo: pay_actual is the correct column name
+        pay.pay_actual = actual
+        pay.pay_status = status
         pay.pay_data =json.dumps(json_response)
 
         db.session.add(pay)
