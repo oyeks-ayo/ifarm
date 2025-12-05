@@ -24,7 +24,9 @@ def login_required(f):
 @app.route('/')
 def home():
     products = Product.query.all()
-    return render_template('users/home.html',products=products)
+    farmer_whatsapp_number = "08162276261"  # Replace with actual farmer's WhatsApp number
+    return render_template('users/home.html',products=products, 
+                           farmer_whatsapp_number=farmer_whatsapp_number)
 
 @app.route('/user/signup/',methods=['POST','GET'])
 def signup():

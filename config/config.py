@@ -11,3 +11,6 @@ class Appconfig(object):
 # export PATH=$PATH:"/c/Program Files/PostgreSQL/18/bin" TO ADD POSTGRESQL TO PATH ON WINDOWS
 # $ psql -U postgres TO ACCESS POSTGRESQL TERMINAL
 # CREATE DATABASE ifarm_db; TO CREATE DATABASE IN POSTGRESQL TERMINAL
+# \q TO QUIT POSTGRESQL TERMINAL
+# Connect to your database
+# psql -U postgres -d ifarm_db

@@ -15,7 +15,7 @@ def login_required(f):
         if session.get('adminonline') != None:
             return f(*args,**kwargs)
         else:
-            flash('You need to be logged in as an Admin', category='error')
+            flash('You need to be logged in as an Admin', category='danger')
             return redirect(url_for('admin_login'))
     return login_decorator
 
